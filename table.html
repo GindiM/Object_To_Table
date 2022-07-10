@@ -1,0 +1,321 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tables</title>
+    <style>
+
+
+        #divFile {
+            margin-left: 50vw;
+            margin-top: 20px;
+        }
+
+
+        #div1 {
+            margin-left: 40vw;
+        }
+
+
+        table, th, td {
+            border: 1px solid lightgray;
+            border-radius: 2px 2px;
+        }
+
+        #div1 input{
+            width: 6vw;
+            border-radius: 2px 2px;
+        }
+
+        #btnAddCol, #btnAbortCol {
+            width: 50px;
+        }
+
+        #inputCol {
+            width: 50px;
+        }
+
+        #btnAdd, #btnNewCol {
+            width: 100px;
+            display: initial;
+        }
+
+        #btnEdit, #btnErase, btnAbort, #btnSave {
+            width: 50px;
+            display: initial;
+        }
+    </style>
+    <script>
+
+
+        let jsonstr = '{"name":"John", "age":30, "city":"New York"}';
+        let listOfObjects = [];
+
+        let object1 = [
+            { firstname: "Michael", lastname: "Gindi", age: "29", sayhello: "hello" },
+            { firstname: "Michael1", lastname: "Gindi1", age: "29", sayhello: "hello1" },
+            { firstname: "Michael2", lastname: "Gindi2", age: "29", sayhello: "hello2" },
+            { firstname: "Michael3", lastname: "Gindi3", age: "29", sayhello: "hello3" },
+            { firstname: "Michael4", lastname: "Gindi4", age: "29", sayhello: "hello4" },
+        ]
+        let object2 = [
+            { name: "dsadsa1" },
+            { name: "dsadsa2" },
+            { name: "dsadsa3" },
+            { name: "dsadsa4" }
+        ]
+
+        let object3 = [
+            { firstname: "Michael4", lastname: "Gindi4", age: "29", sayhello: "hello4", firstna321me: "Michael4", last3name: "Gindi4", a3ge: "29", sayhel3lo: "hello4" },
+            { firstname: "Michael4", lastname: "Gindi4", age: "29", sayhello: "hello4", firstname: "Michael4", lastname: "Gindi4", age: "29", sayhello: "hello4" },
+            { firstname: "Michael4", lastname: "Gindi4", age: "29", sayhello: "hello4", firstname: "Michael4", lastname: "Gindi4", age: "29", sayhello: "hello4" },
+            { firstname: "Michael4", lastname: "Gindi4", age: "29", sayhello: "hello4", firstname: "Michael4", lastname: "Gindi4", age: "29", sayhello: "hello4" },
+            { firstname: "Michael4", lastname: "Gindi4", age: "29", sayhello: "hello4", firstname: "Michael4", lastname: "Gindi4", age: "29", sayhello: "hello4" }
+        ]
+
+        let object4 = [{
+        }]
+
+
+        //-------------------------------------------------------------------
+
+        function MakeADynamicEmptyTable(objectArr) {
+            let div1 = document.getElementById("div1");
+            removeAllChildNodes(div1);
+
+            //let objectArr = [{}];
+            let tempObj = {};
+            let propertyList = [];
+
+
+
+            let tr = document.createElement("tr");
+            let th;
+            let td;
+            div1.appendChild(tr);
+
+            let numberOfRows = objectArr.length;
+            let numberOfHeaders = 0;
+
+            for (let i in objectArr[0]) { //make header row
+                th = document.createElement("th");
+                th.innerText = i;
+                tr.appendChild(th);
+                numberOfHeaders++;
+
+                propertyList.push(i); // saves properties for later use
+            }
+            th = document.createElement("th");                      //new column button
+            let btnNewCol = document.createElement("button");
+            btnNewCol.id = "btnNewCol"; btnNewCol.innerText = "New title";
+            th.appendChild(btnNewCol);
+            tr.appendChild(th);
+
+            btnNewCol.onclick = () => {
+
+                {//using html prompt
+                    let newProperty = prompt("Enter value").replace(/ /g, "_").toString().toLowerCase();
+                    if (newProperty != "" && newProperty != NaN && newProperty != undefined) {
+                        propertyList.push(newProperty);
+
+                        for (let i = 0; i < objectArr.length; i++) {
+
+                            for (let j in objectArr[i]) {
+                                console.log(objectArr[i][newProperty] = "---");
+                            }
+                        }
+                    }
+                    console.log(objectArr);
+                    console.log(propertyList);
+                }
+
+
+                MakeADynamicEmptyTable(objectArr);
+            }
+
+            for (let i = 0; i < numberOfRows; i++) { //make data rows
+                tr = document.createElement("tr");
+                let x = 0
+                for (let j in objectArr[i]) { //make data cells
+                    td = document.createElement("td");
+                    td.id = "td" + i + x;
+                    let divTd = document.createElement("div");
+                    divTd.id = "div" + i + x;
+                    x++;
+                    divTd.innerText = objectArr[i][j];
+                    //console.log(objectArr[i][j]);
+                    td.appendChild(divTd);
+                    tr.appendChild(td);
+                }
+                x = 0;
+                div1.appendChild(tr);
+
+                td = document.createElement("td"); //modifier buttons
+                tr.appendChild(td);
+                let btnEdit = document.createElement("button"); btnEdit.id = "btnEdit"; btnEdit.innerText = "Edit";
+                btnEdit.style.display = "initial";
+                let btnErase = document.createElement("button"); btnErase.id = "btnErase"; btnErase.innerText = "Erase";
+                btnErase.style.display = "initial";
+
+                let btnAbort = document.createElement("button"); btnAbort.id = "btnAbort";
+                btnAbort.style.display = "none"; btnAbort.innerText = "Abort";
+                let btnSave = document.createElement("button"); btnSave.id = "btnSave";
+                btnSave.style.display = "none"; btnSave.innerText = "Save";
+
+                td.appendChild(btnEdit);
+                td.appendChild(btnErase);
+                td.appendChild(btnAbort);
+                td.appendChild(btnSave);
+
+                btnErase.onclick = () => {
+
+
+                    if (objectArr.length <= 1) {
+                        for (let j = 0; j < numberOfHeaders; j++) {
+                            tempObj[propertyList[j]] = "---";
+                            objectArr[0] = tempObj;
+                        }
+                    }
+                    else { objectArr.splice(i, 1); }
+                    console.log(objectArr.length);
+                    console.log(objectArr);
+
+                    MakeADynamicEmptyTable(objectArr);
+                }
+                btnEdit.onclick = () => {
+
+                    for (let x = 0; x < numberOfHeaders; x++) {
+                        divTd = document.getElementById("div" + i + x);
+                        let textEditTd = document.getElementById("td" + i + x);
+                        let textEditInput = document.createElement("input");
+                        textEditInput.id = ("txt" + i + x);
+                        textEditInput.value = divTd.innerText;
+                        divTd.style.display = "none";
+                        textEditTd.appendChild(textEditInput);
+                        textEditInput.style.display = "block";
+
+                        btnEdit.style.display = "none";
+                        btnErase.style.display = "none";
+                        btnAbort.style.display = "initial";
+                        btnSave.style.display = "initial";
+
+                    }
+
+                    btnSave.onclick = () => {
+                        for (let x = 0; x < numberOfHeaders; x++) {
+
+                            let textEditInput = document.getElementById("txt" + i + x);
+                            tempObj[propertyList[x]] = textEditInput.value;
+                        }
+                        objectArr[i] = tempObj;
+                        tempObj = {};
+                        console.log(objectArr);
+                        MakeADynamicEmptyTable(objectArr);
+
+                    }
+
+
+                    btnAbort.onclick = () => {
+                        btnEdit.style.display = "initial";
+                        btnErase.style.display = "initial";
+                        btnAbort.style.display = "none";
+                        btnSave.style.display = "none";
+                        MakeADynamicEmptyTable(objectArr);
+                    }
+                }
+            }
+
+            tr = document.createElement("tr"); //new data-row maker
+            div1.appendChild(tr);
+
+            let btnAdd = document.createElement("button"); btnAdd.id = "btnAdd";
+            btnAdd.innerText = "Add row";
+
+
+            for (let i = 0; i < numberOfHeaders; i++) {
+                td = document.createElement("td");
+                let inputText = document.createElement("input");
+                inputText.id = "input" + i;
+
+                td.appendChild(inputText);
+                tr.appendChild(td);
+            }
+            td = document.createElement("td");//button
+            td.appendChild(btnAdd);           //button
+            tr.appendChild(td);               //button
+
+            document.getElementById("input0").focus();
+
+            div1.onkeyup = (ev) => { if (ev.keyCode == 13) btnAdd.onclick(); };
+
+            btnAdd.onclick = function () {
+                for (let i = 0; i < numberOfHeaders; i++) {
+                    let inputVal = document.getElementById("input" + i).value;
+
+                    if (inputVal == "")
+                        tempObj[propertyList[i]] = "---";
+                    else tempObj[propertyList[i]] = inputVal;
+                }
+                objectArr.push(tempObj);
+                console.log(objectArr);
+                tempObj = {};
+                MakeADynamicEmptyTable(objectArr);
+            }
+            //JSON output
+            //JSON input
+            //add headers
+        }
+
+        function removeAllChildNodes(element) {
+            while (element.firstChild)
+                element.removeChild(element.firstChild);
+        }
+
+        async function fileLoaded(file) {
+            //1.load inner of file 2.convert to object 3.add to object list 4.add to gui list
+            let text = await file.text();
+            console.log(text);
+          //  console.log(JSON.parse(text));
+          //  MakeADynamicEmptyTable();
+        }
+
+        function addToObjectList(jsonString) {
+            let parsedObj = JSON.parse(jsonString);
+            listOfObjects.push(parsedObj);
+            let list = document.getElementById("list");
+            let option = document.createElement("option")
+            option.innerText = Object.keys({ jsonString })[0]; //get variable's name
+            list.appendChild(option);
+        }
+        
+
+
+    </script>
+</head>
+<body onload="MakeADynamicEmptyTable(object1)">
+
+
+    <div id="div1">
+    </div>
+
+    <!-- <div id="divFile">
+         <p><a href="dsa">download table</a></p>
+
+         <input type="file" id="fileLoader" accept=".json" onchange="fileLoaded(this.files[0])" />
+
+         <p>
+             <select id="list" size="10">
+                 <option>Object1</option>
+             </select>
+         </p>
+
+         <p><input type="submit" value="Load" onclick=""></p>
+     </div>-->
+
+</body>
+</html>
